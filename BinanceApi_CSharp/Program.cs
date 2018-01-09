@@ -13,6 +13,7 @@ namespace BinanceApi_CSharp
     {
         static void Main(string[] args)
         {
+            // test connectivity and get server time
             BinanceApi.TestConnectivity();
             BinanceApi.GetServerTime();
 
@@ -24,7 +25,14 @@ namespace BinanceApi_CSharp
             string signature = Tools.ComputeHash_HMACSHA256(secretKey, totalParams);
             Console.WriteLine("the calculated signature is: {0}", signature);
 
-        exit:
+            // get order book
+            BinanceApi.GetOrderBook("ETHBTC", 5);
+            BinanceApi.GetOrderBook("ADAETH");
+            BinanceApi.GetOrderBook("ETHUSDT", 500);
+
+
+
+            exit:
             Console.WriteLine("Press ENTER to exit.");
             Console.ReadLine();
         }

@@ -80,5 +80,28 @@ namespace BinanceApi_CSharp
                 return -1;
             }
         }
+
+        public static readonly string orderBookUrl = binanceUrl + "/api/v1/depth";
+        public static void GetOrderBook(string exchangeSymbols, int limit = 100)
+        {
+            string query = string.Format("{0}?symbol={1}", orderBookUrl, exchangeSymbols);
+            query += "&limit=" + limit.ToString();
+
+            request = (HttpWebRequest)WebRequest.Create(query);
+            Console.WriteLine("Request Query: {0}", query);
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                using (var reader = new System.IO.StreamReader(response.GetResponseStream(), ASCIIEncoding.ASCII))
+                {
+                    string responseText = reader.ReadToEnd();
+                    Console.WriteLine("Response from server:\n{0}", responseText);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Getting order book from server failed. Exception occured: {0}", ex.Message);
+            }
+        }
     }
 }
