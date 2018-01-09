@@ -12,13 +12,23 @@ namespace BinanceApi_CSharp
     class BinanceApi
     {
         // the base URL
-        public static readonly string binanceUrl = "https://www.binance.com/";
+        public static readonly string binanceUrl = "https://api.binance.com";
+
+        // enumerations
+        enum SymbolType { SPOT }
+        enum OrderStatus { NEW, PARTIALLY_FILLED, FILLED, CANCELED, PENDING_CANCEL, REJECTED, EXPIRED }
+        enum OrderType { LIMIT, MARKET }
+        enum OrderSide { BUY, SELL }
+        enum TimeInForse { GTC, IOC }
+        enum Interval { _1m, _3m, _5m, _15m, _30m, _1h, _2h, _4h, _6h, _8h, _12h, _1d, _3d, _1w, _1M }
+
+
 
         static HttpWebRequest request;
         static HttpWebResponse response;
 
         // General Endpoints
-        public static readonly string pingApiUrl = binanceUrl + "api/v1/ping";
+        public static readonly string pingApiUrl = binanceUrl + "/api/v1/ping";
         public static bool TestConnectivity()
         {
             request = (HttpWebRequest)WebRequest.Create(pingApiUrl);
@@ -48,7 +58,7 @@ namespace BinanceApi_CSharp
             }
         }
 
-        public static readonly string timeApiUrl = binanceUrl + "api/v1/time";
+        public static readonly string timeApiUrl = binanceUrl + "/api/v1/time";
         public static long GetServerTime()
         {
             request = (HttpWebRequest)WebRequest.Create(timeApiUrl);
@@ -81,7 +91,7 @@ namespace BinanceApi_CSharp
             using (var hmacsha256 = new HMACSHA256(keyBytes))
             {
                 byte[] hashBytes = hmacsha256.ComputeHash(messageBytes);
-                hashString = Tools.Bytes2Hex(hashBytes).ToLower(); 
+                hashString = Tools.Bytes2Hex(hashBytes).ToLower();
             }
             return hashString;
         }
