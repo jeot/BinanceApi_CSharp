@@ -26,11 +26,12 @@ namespace BinanceApi_CSharp
             Console.WriteLine("the calculated signature is: {0}", signature);
 
             // get order book
-            BinanceApi.GetOrderBook("ETHBTC", 5);
-            BinanceApi.GetOrderBook("ADAETH");
-            BinanceApi.GetOrderBook("ETHUSDT", 500);
+            //BinanceApi.GetOrderBook("ETHBTC", 5);
+            //BinanceApi.GetOrderBook("ADAETH");
+            //BinanceApi.GetOrderBook("ETHUSDT", 500);
 
-
+            // get exchange info
+            BinanceApi.GetExchangeInfo();
 
             exit:
             Console.WriteLine("Press ENTER to exit.");

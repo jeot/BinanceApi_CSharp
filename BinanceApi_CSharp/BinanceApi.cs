@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace BinanceApi_CSharp
 {
@@ -101,6 +102,27 @@ namespace BinanceApi_CSharp
             catch (Exception ex)
             {
                 Console.WriteLine("Getting order book from server failed. Exception occured: {0}", ex.Message);
+            }
+        }
+
+        public static readonly string exchangeInfo = binanceUrl + "/api/v1/exchangeInfo";
+        public static string GetExchangeInfo()
+        {
+            request = (HttpWebRequest)WebRequest.Create(exchangeInfo);
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                using (var reader = new StreamReader(response.GetResponseStream(), ASCIIEncoding.ASCII))
+                {
+                    string responseText = reader.ReadToEnd();
+                    Console.WriteLine("Response from server:\n{0}", responseText);
+                    return responseText;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Getting exchange info failed. Exception occured: {0}", ex.Message);
+                return "";
             }
         }
     }
