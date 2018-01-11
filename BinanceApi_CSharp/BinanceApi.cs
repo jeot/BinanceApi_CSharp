@@ -15,12 +15,12 @@ namespace BinanceApi_CSharp
         public static readonly string binanceUrl = "https://api.binance.com";
 
         // enumerations
-        enum SymbolType { SPOT }
-        enum OrderStatus { NEW, PARTIALLY_FILLED, FILLED, CANCELED, PENDING_CANCEL, REJECTED, EXPIRED }
-        enum OrderType { LIMIT, MARKET }
-        enum OrderSide { BUY, SELL }
-        enum TimeInForse { GTC, IOC }
-        enum Interval { _1m, _3m, _5m, _15m, _30m, _1h, _2h, _4h, _6h, _8h, _12h, _1d, _3d, _1w, _1M }
+        public enum SymbolType { SPOT }
+        public enum OrderStatus { NEW, PARTIALLY_FILLED, FILLED, CANCELED, PENDING_CANCEL, REJECTED, EXPIRED }
+        public enum OrderType { LIMIT, MARKET }
+        public enum OrderSide { BUY, SELL }
+        public enum TimeInForse { GTC, IOC }
+        public enum Interval { _1m, _3m, _5m, _15m, _30m, _1h, _2h, _4h, _6h, _8h, _12h, _1d, _3d, _1w, _1M }
 
 
 
@@ -105,10 +105,10 @@ namespace BinanceApi_CSharp
             }
         }
 
-        public static readonly string exchangeInfo = binanceUrl + "/api/v1/exchangeInfo";
+        public static readonly string exchangeInfoUrl = binanceUrl + "/api/v1/exchangeInfo";
         public static string GetExchangeInfo()
         {
-            request = (HttpWebRequest)WebRequest.Create(exchangeInfo);
+            request = (HttpWebRequest)WebRequest.Create(exchangeInfoUrl);
             try
             {
                 response = (HttpWebResponse)request.GetResponse();
@@ -123,6 +123,27 @@ namespace BinanceApi_CSharp
             {
                 Console.WriteLine("Getting exchange info failed. Exception occured: {0}", ex.Message);
                 return "";
+            }
+        }
+
+        public static readonly string klinesUrl = binanceUrl + "/api/v1/klines";
+        public static List<MarketData> GetMarketDataList(string exchangeSymbols, Interval timeInterval, int limit = 500, long startTime = -1, long endtime = -1)
+        {
+            string query = string.Format("{0}?symbol={1}&interval={2}&limit={3}", 
+                                         klinesUrl, exchangeSymbols, timeInterval.ToString().Remove(0, 1), limit.ToString());
+            if (startTime >= 0) query += "&startTime=" + startTime.ToString();
+            if (endtime >= 0) query += "&endTime=" + endtime.ToString();
+            try
+            {
+                using (StreamReader reader = new StreamReader(WebRequest.Create(query).GetResponse().GetResponseStream(), Encoding.ASCII))
+                {
+                    return MarketData.GetMarketDataArray(reader.ReadToEnd());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed @GetMarketData. Exception: {0}", ex.Message);
+                return null;
             }
         }
     }

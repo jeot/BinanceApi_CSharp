@@ -31,7 +31,18 @@ namespace BinanceApi_CSharp
             //BinanceApi.GetOrderBook("ETHUSDT", 500);
 
             // get exchange info
-            BinanceApi.GetExchangeInfo();
+            //BinanceApi.GetExchangeInfo();
+
+            // get market data (candlestick data)
+            //var eachDayMarketDataList_ETHUSDT = BinanceApi.GetMarketDataList("ETHUSDT", BinanceApi.Interval._1d, 10);
+            //foreach (var d in eachDayMarketDataList_ETHUSDT)
+            //    Console.WriteLine(d.ToString());
+
+			// write to csv file
+			//var each5MinMarketDataList_ADAETH = BinanceApi.GetMarketDataList("ADAETH", BinanceApi.Interval._5m);
+			//MarketData.MarketDataListToCsvFile(each5MinMarketDataList_ADAETH, "each5MinMarketDataList.csv");
+			var each1MinMarketDataList_ETHUSDT = BinanceApi.GetMarketDataList("ETHUSDT", BinanceApi.Interval._1m);
+			MarketData.MarketDataListToCsvFile(each1MinMarketDataList_ETHUSDT, "each1MinMarketDataList.csv");
 
             exit:
             Console.WriteLine("Press ENTER to exit.");
