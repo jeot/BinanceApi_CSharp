@@ -38,11 +38,19 @@ namespace BinanceApi_CSharp
             //foreach (var d in eachDayMarketDataList_ETHUSDT)
             //    Console.WriteLine(d.ToString());
 
-			// write to csv file
-			//var each5MinMarketDataList_ADAETH = BinanceApi.GetMarketDataList("ADAETH", BinanceApi.Interval._5m);
-			//MarketData.MarketDataListToCsvFile(each5MinMarketDataList_ADAETH, "each5MinMarketDataList.csv");
-			var each1MinMarketDataList_ETHUSDT = BinanceApi.GetMarketDataList("ETHUSDT", BinanceApi.Interval._1m);
-			MarketData.MarketDataListToCsvFile(each1MinMarketDataList_ETHUSDT, "each1MinMarketDataList.csv");
+            // write to csv file
+            //var each5MinMarketDataList_ADAETH = BinanceApi.GetMarketDataList("ADAETH", BinanceApi.Interval._5m);
+            //MarketData.MarketDataListToCsvFile(each5MinMarketDataList_ADAETH, "each5MinMarketDataList.csv");
+            //var each1MinMarketDataList_ETHUSDT = BinanceApi.GetMarketDataList("ETHUSDT", BinanceApi.Interval._1m);
+            //MarketData.MarketDataListToCsvFile(each1MinMarketDataList_ETHUSDT, "each1MinMarketDataList.csv");
+
+            // get latest price
+            for (int i = 1; i != 100; i++)
+            {
+                double exRate = BinanceApi.GetRealTimePrice("ETHUSDT");
+                Console.WriteLine("Excange rate of ETH-USDT is now at: {0}", exRate);
+                System.Threading.Thread.Sleep(800);
+            }
 
             exit:
             Console.WriteLine("Press ENTER to exit.");

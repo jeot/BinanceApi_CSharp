@@ -129,7 +129,7 @@ namespace BinanceApi_CSharp
         public static readonly string klinesUrl = binanceUrl + "/api/v1/klines";
         public static List<MarketData> GetMarketDataList(string exchangeSymbols, Interval timeInterval, int limit = 500, long startTime = -1, long endtime = -1)
         {
-            string query = string.Format("{0}?symbol={1}&interval={2}&limit={3}", 
+            string query = string.Format("{0}?symbol={1}&interval={2}&limit={3}",
                                          klinesUrl, exchangeSymbols, timeInterval.ToString().Remove(0, 1), limit.ToString());
             if (startTime >= 0) query += "&startTime=" + startTime.ToString();
             if (endtime >= 0) query += "&endTime=" + endtime.ToString();
@@ -144,6 +144,31 @@ namespace BinanceApi_CSharp
             {
                 Console.WriteLine("Failed @GetMarketData. Exception: {0}", ex.Message);
                 return null;
+            }
+        }
+
+        public static readonly string priceUrl = binanceUrl + "/api/v3/ticker/price";
+        public static double GetRealTimePrice(string exchangeSymbols)
+        {
+            string query = string.Format("{0}?symbol={1}", priceUrl, exchangeSymbols);
+            try
+            {
+                using (StreamReader reader = new StreamReader(WebRequest.Create(query).GetResponse().GetResponseStream(), Encoding.ASCII))
+                {
+                    string jsonString = reader.ReadToEnd();
+                    if (JObject.Parse(jsonString)["symbol"].ToString() == exchangeSymbols)
+                        return double.Parse(JObject.Parse(jsonString)["price"].ToString());
+                    else
+                    {
+                        Console.WriteLine("The returned symbol didn't match the requested one!");
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: {0}", ex.Message);
+                return -1;
             }
         }
     }
